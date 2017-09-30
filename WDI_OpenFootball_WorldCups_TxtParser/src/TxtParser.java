@@ -16,19 +16,19 @@ public class TxtParser {
 	public ArrayList<ArrayList<String>> paths_cup_countries = new ArrayList<ArrayList<String>>();
 	public String path_cup = "/1930--uruguay/squads/";
 	public String fileName_out = "/Users/TimoSturm/Desktop/results/results.csv";
-	private String columns = "cup_place,cup_year,countryName_full,countryName_short,numberOfPlayers,"
-			+ "player_number,player_position,player_name,player_club_number,player_club";
+	private String columns = "cup_host,cup_year,countryName_full,FIFACountryCode,numberOfPlayers,"
+			+ "player_shirtNumber,player_position,player_name,player_caps,player_club";
 	
 	// Information:
 	private String cup_year = "";
-	private String cup_place = "";
+	private String cup_host = "";
 	private String countryName_full = "";
-	private String countryName_short = "";
+	private String fifaCountryCode = "";
 	private String numberOfPlayers = "-1";
-	private ArrayList<String> player_numbers = new ArrayList<String>();
+	private ArrayList<String> player_shirtNumbers = new ArrayList<String>();
 	private ArrayList<String> player_positions = new ArrayList<String>();
 	private ArrayList<String> player_names = new ArrayList<String>();
-	private ArrayList<String> player_club_numbers = new ArrayList<String>();
+	private ArrayList<String> player_caps = new ArrayList<String>();
 	private ArrayList<String> player_clubs = new ArrayList<String>();
 	
 	public static void main(String[] args){
@@ -88,7 +88,7 @@ public class TxtParser {
 	
 	public void parseTxtFile(String path) throws IOException{
 		cup_year = path.replaceAll("[^0-9]", "");
-		cup_place = path.split("/")[path.split("/").length - 3].replaceAll("[0-9]", "").replace("-", "");
+		cup_host = path.split("/")[path.split("/").length - 3].replaceAll("[0-9]", "").replace("-", "");
 		
 		BufferedReader in = new BufferedReader(new FileReader(path));
 		String line;
@@ -103,7 +103,7 @@ public class TxtParser {
 		    			countryName_full = countryName_full + " " + countryNames[i];
 		    		}
 		    		else{
-				    	countryName_short = countryNames[i].replace("(", "").replace(")", "");
+				    	fifaCountryCode = countryNames[i].replace("(", "").replace(")", "");
 		    		}
 		    	}
 		    }
@@ -116,7 +116,7 @@ public class TxtParser {
 		    	ArrayList<String> splitResult = new ArrayList<String>(Arrays.asList(line.split(" ")));
 		    	splitResult.removeAll(Arrays.asList("", null));
 		    	if(!splitResult.isEmpty()){
-			    	player_numbers.add(splitResult.get(0).replace("(", "").replace(")", ""));
+			    	player_shirtNumbers.add(splitResult.get(0).replace("(", "").replace(")", ""));
 			    	player_positions.add(splitResult.get(1));
 			    	
 			    	int i = 2;
@@ -132,7 +132,7 @@ public class TxtParser {
 			    		i++;
 			    	}
 			    	player_names.add(name_player);
-			    	player_club_numbers.add(splitResult.get(++i).replace(",", ""));
+			    	player_caps.add(splitResult.get(++i).replace(",", ""));
 			    	
 			    	
 			    	String name_club = splitResult.get(++i);
@@ -149,14 +149,14 @@ public class TxtParser {
 		in.close();
 		
 		System.out.println("cup_year: '" + cup_year + "'");
-		System.out.println("cup_place: '" + cup_place + "'");
+		System.out.println("cup_place: '" + cup_host + "'");
 		System.out.println("countryName_full: '" + countryName_full + "'");
-		System.out.println("countryName_short: '" + countryName_short + "'");
+		System.out.println("countryName_short: '" + fifaCountryCode + "'");
 		System.out.println("numberOfPlayers: '" + numberOfPlayers + "'");
-		System.out.println("player_numbers: " + player_numbers);
+		System.out.println("player_numbers: " + player_shirtNumbers);
 		System.out.println("player_positions: " + player_positions);
 		System.out.println("player_names: " + player_names);
-		System.out.println("player_club_numbers: " + player_club_numbers);
+		System.out.println("player_club_numbers: " + player_caps);
 		System.out.println("player_clubs: " + player_clubs);
 		
 		createCSV();
@@ -177,9 +177,9 @@ public class TxtParser {
 			FileWriter fw = new FileWriter(fileName_out,true);
 			String newLine = "";
 			for(int i=0; i< player_names.size(); i++){
-				 newLine = cup_place + "," + cup_year + "," + countryName_full + "," + countryName_short + "," + numberOfPlayers + "," + 
-						 player_numbers.get(i) + "," + player_positions.get(i) + "," + player_names.get(i) + "," + 
-						 player_club_numbers.get(i) + "," + player_clubs.get(i);
+				 newLine = cup_host + "," + cup_year + "," + countryName_full + "," + fifaCountryCode + "," + numberOfPlayers + "," + 
+						 player_shirtNumbers.get(i) + "," + player_positions.get(i) + "," + player_names.get(i) + "," + 
+						 player_caps.get(i) + "," + player_clubs.get(i);
 				 fw.write(newLine + "\n");	//appends the string to the file
 			}
 		    fw.close();
