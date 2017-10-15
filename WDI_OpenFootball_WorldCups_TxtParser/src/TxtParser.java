@@ -183,6 +183,13 @@ public class TxtParser {
 				 fw.write(newLine + "\n");	//appends the string to the file
 			}
 		    fw.close();
+		    
+			player_shirtNumbers = new ArrayList<String>();
+			player_positions = new ArrayList<String>();
+			player_names = new ArrayList<String>();
+			player_caps = new ArrayList<String>();
+			player_clubs = new ArrayList<String>();
+		    
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
